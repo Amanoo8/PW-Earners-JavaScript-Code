@@ -1,0 +1,1 @@
+.map((student)=>student.name)
