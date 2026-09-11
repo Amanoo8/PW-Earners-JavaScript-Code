@@ -1,0 +1,7 @@
+.newBorder{
+    border: 3px solid aqua;
+    outline: none;
+}
+#error{
+    color: red;
+}

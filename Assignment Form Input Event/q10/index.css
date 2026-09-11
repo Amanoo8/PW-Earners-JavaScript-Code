@@ -1,0 +1,10 @@
+.newBorder{
+    border: 3px solid aqua;
+    outline: none;
+}
+.red{
+    color: red;
+}
+.green{
+    color:green;
+}
