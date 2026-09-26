@@ -24,4 +24,4 @@ function addToCart() {
     setTimeout(() => {
         console.log("pizza added to cart");
     }, 3000)
-}
+} 
