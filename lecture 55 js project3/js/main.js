@@ -239,7 +239,7 @@ if(addToCart){
   })
   if(!exists)cartl.push(p);
   localStorage.setItem("cartl",JSON.stringify(cartl));
-  win
+  window.location.reload();
 })
 }
 }
@@ -325,20 +325,20 @@ if(cartP){
   let cartl=JSON.parse(localStorage.getItem("cartl"))||[];
   cartl.forEach((p)=>{
     let div=document.createElement("div");
-  div.className="p-4 sm:p-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-between";
+  div.className="product p-4 sm:p-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-between";
   let cp=`<div class="flex items-center gap-4 w-full sm:w-auto flex-1 min-w-0">
               <div
                 class="w-16 h-16 sm:w-20 sm:h-20 bg-white border border-slate-200 rounded p-1.5 flex items-center justify-center shrink-0">
-                <img src="https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp"
-                  alt="Essence Mascara Lash Princess" class="max-h-full max-w-full object-contain">
+                <img src=${p.images[0]}
+                  alt=${p.title} class="max-h-full max-w-full object-contain">
               </div>
               <div class="min-w-0 flex-1">
                 <a href="product-details.html"
                   class="text-sm font-semibold text-slate-900 hover:text-teal-700 line-clamp-2 transition"
-                  title="Essence Mascara Lash Princess">
-                  Essence Mascara Lash Princess
+                  title=${p.title}>
+                 ${p.title}
                 </a>
-                <p class="text-xs text-slate-500 mt-1">₹9.99 each</p>
+                <p class="text-xs text-slate-500 mt-1">$${p.price} each</p>
               </div>
             </div>
             <div class="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 w-full sm:w-auto shrink-0">
@@ -351,7 +351,7 @@ if(cartP){
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
                   </svg>
                 </button>
-                <span class="w-8 text-center text-xs font-semibold text-slate-800 select-none">1</span>
+                <span class="qt w-8 text-center text-xs font-semibold text-slate-800 select-none"></span>
                 <button type="button"
                   class="cart-qty-plus p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-r transition"
                   aria-label="Increase quantity">
@@ -362,7 +362,7 @@ if(cartP){
                 </button>
               </div>
               <div class="w-20 text-right">
-                <span class="text-sm font-bold text-slate-900">₹9.99</span>
+                <span class="text-sm font-bold text-slate-900">$${p.price}</span>
               </div>
               <button type="button"
                 class="cart-wishlist-btn text-slate-400 hover:text-teal-700 p-1.5 rounded transition"
@@ -376,7 +376,7 @@ if(cartP){
               </button>
               <button type="button" class="cart-remove-btn text-slate-400 hover:text-red-600 p-1.5 rounded transition"
                 title="Remove from cart" aria-label="Remove item">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                <svg class="del w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
@@ -385,9 +385,36 @@ if(cartP){
               </button>
             </div>`
   div.innerHTML=cp;
-  console.log(div);
+  // console.log(div);
   cartP.append(div);
+
   })
 }
-
+let cartArray=JSON.parse(localStorage.getItem("cartl"))||[];
+document.querySelector("#cart-count").textContent=cartArray.length;
+{
+  const cart=document.querySelectorAll(".del");
+  cart.forEach((c)=>{
+  c.addEventListener("click",(e)=>{
+  e.stopPropagation();
+  let index=Number(e.currentTarget.dataset.id);
+  deleteElementFromStorage("cartl",index);
+   window.location.reload();
+  })
+  let quant=1;
+  document.querySelector(".qt").textContent=quant;
+  document.querySelector(".cart-qty-plus").addEventListener("click",(e)=>{
+    e.stopPropagation();
+   quant++;
+   document.querySelector(".qt").textContent=quant;
+  })
+  document.querySelector(".cart-qty-minus").addEventListener("click",(e)=>{
+    e.stopPropagation();
+  if(quant>1){
+    quant--;
+   document.querySelector(".qt").textContent=quant;
+  }
+  })
+  })
+}
 function init() { }
