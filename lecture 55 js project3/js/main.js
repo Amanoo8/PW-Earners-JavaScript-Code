@@ -1238,11 +1238,13 @@ if (cartCount) {
     cartArray.length;
 
 }
-// Calculate and show Order Summary Total
+// =========================
+// CART TOTAL
+// =========================
 let orderTotal = 0;
 
 cartArray.forEach(item => {
-    orderTotal += item.price * (item.quantity || 1);
+    orderTotal += Number(item.price) * (Number(item.quantity) || 1);
 });
 
 const totalAmount = document.querySelector(".ta");
@@ -1250,49 +1252,35 @@ const totalAmount = document.querySelector(".ta");
 if (totalAmount) {
     totalAmount.textContent = `₹${orderTotal.toFixed(2)}`;
 }
-function loadCheckout() {
-    let cart = JSON.parse(localStorage.getItem("cartl")) || [];
 
-    if (cart.length === 0) {
-        checkoutItems.innerHTML = "<p>Your cart is empty.</p>";
-        checkoutTotal.textContent = "₹0";
-        return;
-    }
 
-    let total = 0;
-
-    checkoutItems.innerHTML = "";
-
-    cart.forEach((item) => {
-        let itemTotal = item.price * item.quantity;
-        total += itemTotal;
-
-        checkoutItems.innerHTML += `
-            <div class="checkout-item">
-                <p>${item.title}</p>
-                <p>₹${item.price} × ${item.quantity} = ₹${itemTotal.toFixed(2)}</p>
-            </div>
-        `;
-    });
-
-    checkoutTotal.textContent = `₹${total.toFixed(2)}`;
-}
-
-loadCheckout();
+// =========================
+// CHECKOUT BUTTON
+// =========================
 
 const checkoutBtn = document.querySelector("#checkout-btn");
 
 if (checkoutBtn) {
-    checkoutBtn.addEventListener("click", function () {
 
-        let cart = JSON.parse(localStorage.getItem("cartl")) || [];
+    checkoutBtn.addEventListener("click", function (e) {
+
+        e.preventDefault();
+
+        const cart =
+            JSON.parse(localStorage.getItem("cartl")) || [];
 
         if (cart.length === 0) {
             alert("Your cart is empty!");
             return;
         }
 
-        // Clear your actual cart
+        // Save the order total before clearing cart
+        const total =
+            cart.reduce((sum, item) => {
+                return sum + Number(item.price) * (Number(item.quantity) || 1);
+            }, 0);
+
+        // Clear cart
         localStorage.removeItem("cartl");
 
         // Update cart count
@@ -1300,7 +1288,12 @@ if (checkoutBtn) {
             cartCount.textContent = "0";
         }
 
-        alert("Order placed successfully!");
+        // Update total
+        if (totalAmount) {
+            totalAmount.textContent = "₹0.00";
+        }
+
+        alert(`Order placed successfully!\nTotal Amount: ₹${total.toFixed(2)}`);
 
         window.location.href = "index.html";
     });
